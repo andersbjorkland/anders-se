@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  silverstripe:
+    build:
+        context: anders-be/docker/php
+    volumes:
+      - ./anders-be:/var/www/html
+    ports:
+        - "8080:80"
+    depends_on:
+      - database
+    environment:
+      - DOCUMENT_ROOT=/var/www/html/public
+      - SS_TRUSTED_PROXY_IPS=*
+      - SS_ENVIRONMENT_TYPE=dev
+      - SS_DATABASE_SERVER=database
+      - SS_DATABASE_NAME=SS_mysite
+      - SS_DATABASE_USERNAME=root
+      - SS_DATABASE_PASSWORD=
+      - SS_DEFAULT_ADMIN_USERNAME=admin
+      - SS_DEFAULT_ADMIN_PASSWORD=password
+
+  database:
+    image: mariadb:10.3
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:
