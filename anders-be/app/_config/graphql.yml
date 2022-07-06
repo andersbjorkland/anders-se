@@ -1,0 +1,16 @@
+SilverStripe\Control\Director:
+  rules:
+    'graphql': '%$SilverStripe\GraphQL\Controller.default'
+    'headless': '%$SilverStripe\GraphQL\Controller.headless'
+
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\GraphQL\Controller.headless:
+    class: SilverStripe\GraphQL\Controller
+    constructor:
+      schemaKey: headless
+
+SilverStripe\GraphQL\Schema\Schema:
+  schemas:
+    headless:
+      src:
+        - app/_graphql

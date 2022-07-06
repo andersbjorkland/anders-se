@@ -1,0 +1,7 @@
+DNADesign\Elemental\Models\ElementalArea:
+  fields: '*'
+  operations: '*'
+
+DNADesign\Elemental\Models\ElementContent:
+  fields: '*'
+  operations: '*'

@@ -112,6 +112,9 @@
       <excludeFolder url="file://$MODULE_DIR$/anders-be/vendor/symfony/event-dispatcher" />
       <excludeFolder url="file://$MODULE_DIR$/anders-be/vendor/ralouphie/getallheaders" />
       <excludeFolder url="file://$MODULE_DIR$/anders-be/vendor/symfony/polyfill-intl-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/anders-be/vendor/symbiote/silverstripe-gridfieldextensions" />
+      <excludeFolder url="file://$MODULE_DIR$/anders-be/vendor/dnadesign/silverstripe-elemental" />
+      <excludeFolder url="file://$MODULE_DIR$/anders-be/vendor/silverstripe/graphql-devtools" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
