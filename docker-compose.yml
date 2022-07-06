@@ -2,9 +2,9 @@ version: "3.8"
 services:
   silverstripe:
     build:
-        context: anders-be/docker/php
+        context: silverstripe/docker/php
     volumes:
-      - ./anders-be:/var/www/html
+      - ./silverstripe:/var/www/html
     ports:
         - "8080:80"
     depends_on:
@@ -26,5 +26,7 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - db-data:/var/lib/mysql
+    ports:
+      - "6033:3306"
 volumes:
   db-data:

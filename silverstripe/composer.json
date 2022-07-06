@@ -1,7 +1,12 @@
 {
     "name": "silverstripe/installer",
     "type": "silverstripe-recipe",
-    "description": "The SilverStripe Framework Installer",
+    "description": "A SilverStripe powered backend",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/src/"
+        }
+    },
     "require": {
         "php": "^8.0",
         "silverstripe/recipe-plugin": "^1.2",
