@@ -1,0 +1,3 @@
+gorriecoe\Link\Models\Link:
+  fields: '*'
+  operations: '*'

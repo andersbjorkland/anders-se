@@ -9,5 +9,10 @@ namespace {
         private static $db = [];
 
         private static $has_one = [];
+
+        public function canView($member = null): bool
+        {
+            return true;
+        }
     }
 }

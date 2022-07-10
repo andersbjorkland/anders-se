@@ -5,3 +5,7 @@ DNADesign\Elemental\Models\ElementalArea:
 DNADesign\Elemental\Models\ElementContent:
   fields: '*'
   operations: '*'
+
+App\Model\Element\HeroElement:
+  fields: '*'
+  operations: '*'

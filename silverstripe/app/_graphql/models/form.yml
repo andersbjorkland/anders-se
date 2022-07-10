@@ -1,0 +1,3 @@
+App\Form\ContactForm:
+  fields: '*'
+  operations: '*'

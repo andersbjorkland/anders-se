@@ -1,4 +1,5 @@
-/silverstripe-cache/
+/silverstripe-cache/*
+!/silverstripe-cache/.gitkeep
 /.env
 /.env.local
 /vendor/
