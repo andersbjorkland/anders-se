@@ -1,12 +1,11 @@
 version: "3.8"
 services:
   silverstripe:
-    build:
-        context: silverstripe/docker/php
+    build: ./silverstripe/docker/silverstripe
+    ports:
+      - "8080:80"
     volumes:
       - ./silverstripe:/var/www/html
-    ports:
-        - "8080:80"
     depends_on:
       - database
     environment:
