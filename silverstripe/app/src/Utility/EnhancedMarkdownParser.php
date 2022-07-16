@@ -30,7 +30,7 @@ class EnhancedMarkdownParser
             $image = Image::get()->byID($tagID);
             if ($image) {
                 /** @var Image $image */
-                $imageURL = $image->getURL();
+                $imageURL = $image->getAbsoluteURL();
                 $imageAlt = $image->Alt;
 
                 $imageMarkdown = sprintf('![%s](%s)', $imageAlt, $imageURL);

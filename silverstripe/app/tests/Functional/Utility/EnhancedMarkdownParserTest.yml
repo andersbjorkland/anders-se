@@ -10,6 +10,7 @@ SilverStripe\Assets\Image:
     ID: 2
     Filename: test.jpeg
     Title: Test Image
+    Alt: A test image
     Caption: Test Image
     ParentID: 1
     FileFilename: Tests/test.jpeg

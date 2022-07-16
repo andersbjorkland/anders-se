@@ -15,8 +15,10 @@ class EnhancedMarkdownParserTest extends FunctionalTest
      */
     public function testReplaceImageTags()
     {
+        $hostname = $_ENV['HOSTNAME'] ?? 'localhost';
+        $host = "http://$hostname";
         $markdown = '{{image:2}}';
-        $expected = '![](/assets/Tests/test.jpeg)';
+        $expected = '![A test image](' . $host . '/assets/Tests/test.jpeg)';
         $actual = EnhancedMarkdownParser::replaceImageTags($markdown);
         $this->assertEquals($expected, $actual);
     }
