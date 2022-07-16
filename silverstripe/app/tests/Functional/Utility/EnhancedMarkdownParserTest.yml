@@ -1,0 +1,16 @@
+SilverStripe\Assets\Folder:
+  folder:
+    ID: 1
+    Name: Tests
+    Title: Tests
+    ParentID: 0
+
+SilverStripe\Assets\Image:
+  img1:
+    ID: 2
+    Filename: test.jpeg
+    Title: Test Image
+    Caption: Test Image
+    ParentID: 1
+    FileFilename: Tests/test.jpeg
+    FileHash: b9b64f336316b8a9099f88babc5ea458fbdc6aa2
