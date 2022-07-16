@@ -2,6 +2,9 @@
 
 namespace App\Model\Element;
 
+use App\Model\Article;
+use App\Model\Page\ArticlePage;
+
 class ArticleElement extends \DNADesign\Elemental\Models\BaseElement
 {
     private static $icon = 'font-icon-image';
@@ -11,7 +14,7 @@ class ArticleElement extends \DNADesign\Elemental\Models\BaseElement
     ];
 
     private static $has_one = [
-        'Article' => \App\Model\Page\ArticlePage::class
+        'Article' => ArticlePage::class
     ];
 
     public function getType()
