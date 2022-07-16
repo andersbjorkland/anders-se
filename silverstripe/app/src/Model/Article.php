@@ -4,12 +4,14 @@ namespace App\Model;
 
 use App\Admin\ArticleAdmin;
 use App\Model\Page\ArticleHolder;
+use App\Utility\EnhancedMarkdownParser;
 use App\Utility\LinkUtility;
 use Axllent\Gfmarkdown\Forms\MarkdownEditor;
 use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
@@ -89,11 +91,24 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
         ));
 
         $fields->removeByName('Markdown');
-
-       $editor = MarkdownEditor::create('EnhancedMarkdown', 'Page Content (Markdown)')
+        $fields->removeByName('EnhancedMarkdown');
+        $editor = MarkdownEditor::create('EnhancedMarkdown', 'Page Content (Markdown)')
             ->setRows(20)                   // set number of rows in CMS
             ->setWrap(false)                // disable word wrapping
-            ->setHighlightActiveLine(true);  // enable line highlighting
+            ->setHighlightActiveLine(true)  // enable line highlighting
+            ->setDescription(
+                '<p>Markdown help: </p>'
+                . '<ul>'
+                    . '<li>'
+                        . '<a href="https://guides.github.com/features/mastering-markdown/" target="_blank">'
+                            . 'GitHub Markdown Guide'
+                        . '</a>'
+                    . '</li>'
+                    . '<li>Image Relations: <i>{{image:123}}</i></li>'
+                . '</ul>'
+            )
+            ->addExtraClass('cms-description-toggle');
+
 
         $fields->addFieldToTab('Root.Main', $editor);
 
@@ -124,6 +139,7 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
 
     public function onBeforeWrite()
     {
+        // Tags
         $typeID = TaxonomyType::get()->filter('Name', 'Tag')->first()->ID ?? 0;
         $tags = $this->Tags()->filter('TypeID', 0);
         foreach ($tags as $tag) {
@@ -131,6 +147,7 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
             $tag->write();
         }
 
+        // URLSegment
         $articleHolder = ArticleHolder::get()->first();
         $baseLink = $articleHolder ? $articleHolder->Link() : Director::absoluteBaseURL();
         $defaultURLSegment = LinkUtility::generateURLSegment($this->Title, $this);
@@ -138,6 +155,13 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
             $this->URLSegment = $defaultURLSegment;
         } else {
             $this->URLSegment = $defaultURLSegment;
+        }
+
+        // Markdown
+        try {
+            $this->Markdown = EnhancedMarkdownParser::parse($this->EnhancedMarkdown);
+        } catch (\Exception $e) {
+            Debug::message($e->getMessage());
         }
 
         parent::onBeforeWrite();
