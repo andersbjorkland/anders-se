@@ -1,15 +1,12 @@
 FROM --platform=linux/arm64/v8 brettt89/silverstripe-web:8.0-apache
 
-ENV DOCUMENT_ROOT /usr/src/myapp
-
-COPY . $DOCUMENT_ROOT
-WORKDIR $DOCUMENT_ROOT
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug \
+#RUN pecl install xdebug \
+#    && docker-php-ext-enable xdebug \
 
 #RUN apt-get update && apt-get install -y \
 #      libfreetype6-dev \
