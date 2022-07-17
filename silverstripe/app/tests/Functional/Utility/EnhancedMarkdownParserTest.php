@@ -23,6 +23,26 @@ class EnhancedMarkdownParserTest extends FunctionalTest
         $this->assertEquals($expected, $actual);
     }
 
+    public function testScalesImage()
+    {
+        $hostname = $_ENV['HOSTNAME'] ?? 'localhost';
+        $host = "http://$hostname";
+        $markdown = '{{image:2, width:100, height:20}}';
+        $expectedStartsWith = '![A test image](' . $host . '/assets/Tests/test__Fill';
+        $actual = EnhancedMarkdownParser::replaceImageTags($markdown);
+        $this->assertNotFalse(strpos($actual, $expectedStartsWith), 'Image should be scaled');
+    }
+
+    public function testScalesWidthOnly()
+    {
+        $hostname = $_ENV['HOSTNAME'] ?? 'localhost';
+        $host = "http://$hostname";
+        $markdown = '{{image:2,width:100}}';
+        $expectedStartsWith = '![A test image](' . $host . '/assets/Tests/test__ScaleWidth';
+        $actual = EnhancedMarkdownParser::replaceImageTags($markdown);
+        $this->assertNotFalse(strpos($actual, $expectedStartsWith), 'Image should be scaled');
+    }
+
     public static function tearDownAfterClass(): void
     {
         $tables = array_values(DB::table_list());

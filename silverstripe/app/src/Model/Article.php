@@ -105,7 +105,10 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
                             . 'GitHub Markdown Guide'
                         . '</a>'
                     . '</li>'
-                    . '<li>Image Relations: <i>{{image:123}}</i><br>This assumes you have uploaded or imported images.</li>'
+                    . '<li>'
+                        . 'Image Relations: <i>{{image:123}}</i><br>This assumes you have uploaded or imported images.<br>'
+                        . 'Scaling is possible by adding a width and height to the image tag, e.g. <i>{{image:123, width:200, height:300}}</i>'
+                    .'</li>'
                 . '</ul>'
             )
             ->addExtraClass('cms-description-toggle');
