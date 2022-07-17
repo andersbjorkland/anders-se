@@ -5,8 +5,10 @@ namespace App\Model;
 use App\Admin\ProjectAdmin;
 use SilverStripe\Assets\Image;
 use SilverStripe\Control\Controller;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Taxonomy\TaxonomyTerm;
+use SilverStripe\Taxonomy\TaxonomyType;
 use SilverStripe\Versioned\Versioned;
 
 class Project extends \SilverStripe\ORM\DataObject implements CMSPreviewable
@@ -29,6 +31,27 @@ class Project extends \SilverStripe\ORM\DataObject implements CMSPreviewable
     private static $extensions = [
         Versioned::class
     ];
+
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+        $fields->removeByName('CategoryID');
+        $categoryField = DropdownField::create(
+            'CategoryID',
+            'Category',
+            $this->getCategories()
+        );
+
+        $fields->insertAfter('Description', $categoryField);
+
+        return $fields;
+    }
+
+    public function getCategories()
+    {
+        $taxonomyTypeID = TaxonomyType::get()->filter('Name', 'Category')->first()->ID ?? 0;
+        return TaxonomyTerm::get()->filter('TypeID', $taxonomyTypeID);
+    }
 
     public function PreviewLink($action = null)
     {
