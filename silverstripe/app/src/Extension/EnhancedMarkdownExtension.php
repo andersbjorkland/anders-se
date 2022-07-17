@@ -22,6 +22,10 @@ class EnhancedMarkdownExtension extends \SilverStripe\ORM\DataExtension
         'MarkdownImages' => Image::class
     ];
 
+    private static $owns = [
+        'MarkdownImages'
+    ];
+
     public function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName('Markdown');
