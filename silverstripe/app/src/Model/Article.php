@@ -3,19 +3,8 @@
 namespace App\Model;
 
 use App\Admin\ArticleAdmin;
-use App\Model\Page\ArticleHolder;
-use App\Utility\EnhancedMarkdownParser;
-use App\Utility\LinkUtility;
-use Axllent\Gfmarkdown\Forms\MarkdownEditor;
-use SilverStripe\AssetAdmin\Forms\UploadField;
-use SilverStripe\Assets\Image;
-use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\Control\Controller;
-use SilverStripe\Control\Director;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\TagField\TagField;
 use SilverStripe\Taxonomy\TaxonomyTerm;
@@ -36,10 +25,6 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
 
     private static $many_many = [
         'Tags' => TaxonomyTerm::class,
-    ];
-
-    private static $owns = [
-        'Images'
     ];
 
     // Enable CMS preview for versioned objects
@@ -128,13 +113,6 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
             'item',
             $this->ID
         );
-        /*
-        $link = Controller::join_links(
-            CMSPageEditController::singleton()->Link('show'),
-            $this->ID
-        );
-        return Director::absoluteURL($link);
-        */
     }
 
     public function forTemplate()
