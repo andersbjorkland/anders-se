@@ -3,6 +3,7 @@
 namespace App\Extension;
 
 use App\Utility\EnhancedMarkdownParser;
+use Axllent\Gfmarkdown\FieldTypes\Markdown;
 use Axllent\Gfmarkdown\Forms\MarkdownEditor;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
@@ -15,7 +16,8 @@ class EnhancedMarkdownExtension extends \SilverStripe\ORM\DataExtension
 {
     private static $db = [
         'Markdown' => 'Markdown',
-        'EnhancedMarkdown' => 'Markdown'
+        'EnhancedMarkdown' => 'Markdown',
+        'TranslatedMarkdown' => 'HTMLText'
     ];
 
     private static $many_many = [
@@ -31,6 +33,7 @@ class EnhancedMarkdownExtension extends \SilverStripe\ORM\DataExtension
         $fields->removeByName('Markdown');
         $fields->removeByName('EnhancedMarkdown');
         $fields->removeByName('MarkdownImages');
+        $fields->removeByName('TranslatedMarkdown');
 
         $editor = MarkdownEditor::create('EnhancedMarkdown', 'Page Content (Markdown)')
             ->setRows(20)                   // set number of rows in CMS
@@ -65,6 +68,10 @@ class EnhancedMarkdownExtension extends \SilverStripe\ORM\DataExtension
     {
         try {
             $this->owner->Markdown = EnhancedMarkdownParser::parse($this->owner->EnhancedMarkdown);
+
+            $translated = (new Markdown('TranslatedMarkdown'))->setValue($this->owner->Markdown)->AsHTML();
+
+            $this->owner->TranslatedMarkdown = $translated;
         } catch (\Exception $e) {
             Debug::message($e->getMessage());
         }
