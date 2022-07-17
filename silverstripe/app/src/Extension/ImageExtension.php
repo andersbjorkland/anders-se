@@ -11,9 +11,16 @@ class ImageExtension extends DataExtension
         'Alt' => 'Varchar(255)',
     ];
 
-    public function updateCMSFields(FieldList $fields)
+    private static $extra_fields = [
+        'summary_fields' => [
+            'ID' => '#',
+            'Title' => 'Title'
+        ],
+    ];
+
+    public function SmallIcon()
     {
-        $fields->addFieldToTab('Root.Main', $altField = new \SilverStripe\Forms\TextField('Alt', 'Alt'));
-        $altField->setDescription('Alternative text for the image');
+        return $this->owner->Thumbnail(40, 40);
     }
+
 }

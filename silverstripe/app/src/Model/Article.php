@@ -7,6 +7,7 @@ use App\Model\Page\ArticleHolder;
 use App\Utility\EnhancedMarkdownParser;
 use App\Utility\LinkUtility;
 use Axllent\Gfmarkdown\Forms\MarkdownEditor;
+use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\Control\Controller;
@@ -104,7 +105,7 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
                             . 'GitHub Markdown Guide'
                         . '</a>'
                     . '</li>'
-                    . '<li>Image Relations: <i>{{image:123}}</i></li>'
+                    . '<li>Image Relations: <i>{{image:123}}</i><br>This assumes you have uploaded or imported images.</li>'
                 . '</ul>'
             )
             ->addExtraClass('cms-description-toggle');
@@ -112,14 +113,23 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
 
         $fields->addFieldToTab('Root.Main', $editor);
 
-        /** @var GridField $imagesField */
-        $imagesField = $fields->dataFieldByName('Images');
-        $imagesConfig = $imagesField->getConfig();
+        $fields->removeByName('Images');
+        /** @var UploadField $imageField */
+        $imageField = UploadField::create('Images', 'Images');
+
+        $fields->addFieldToTab('Root.Images', $imageField);
+
+        $fields->addFieldToTab('Root.Main', $imagesGridField = GridField::create(
+            '',
+            'Image list',
+            $this->Images()
+        ));
+        $imagesConfig = $imagesGridField->getConfig();
         $imagesColumns = $imagesConfig->getComponentByType(GridFieldDataColumns::class);
         $imagesColumns->setDisplayFields([
             'ID' => '#',
             'Title' => 'Title',
-            'CMSThumbnail' => 'Thumbnail'
+            'SmallIcon' => 'Thumbnail'
         ]);
 
         return $fields;
