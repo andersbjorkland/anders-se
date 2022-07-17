@@ -14,7 +14,7 @@ class ArticleElement extends \DNADesign\Elemental\Models\BaseElement
     ];
 
     private static $has_one = [
-        'Article' => ArticlePage::class
+        'Article' => Article::class
     ];
 
     public function getType()

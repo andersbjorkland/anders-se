@@ -27,10 +27,7 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
     private static $table_name = 'Article';
 
     private static $db = array(
-        'Title' => 'Varchar(255)',
-        'EnhancedMarkdown' => 'Markdown',
-        'Markdown' => 'Markdown',
-        'URLSegment' => 'Varchar(255)',
+        'Title' => 'Varchar(255)'
     );
 
     private static $has_one = [
@@ -39,15 +36,10 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
 
     private static $many_many = [
         'Tags' => TaxonomyTerm::class,
-        'Images' => Image::class
     ];
 
     private static $owns = [
         'Images'
-    ];
-
-    private static $indexes = [
-        "URLSegment" => true,
     ];
 
     // Enable CMS preview for versioned objects
@@ -60,21 +52,6 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-
-        $fields->removeByName('URLSegment');
-        $urlField = SiteTreeURLSegmentField::create(
-            'URLSegment',
-            'URL Segment'
-        );
-
-        /** @var ArticleHolder $articleHolder */
-        $articleHolder = ArticleHolder::get()->first();
-        $baseLink = $articleHolder ? $articleHolder->Link() : Director::absoluteBaseURL();
-        $urlField
-            ->setURLPrefix($baseLink)
-            ->setURLSuffix('?stage=Stage')
-            ->setDefaultURL('New-Article');
-        $fields->addFieldToTab('Root.Main', $urlField);
 
         $fields->removeByName('Tags');
         $fields->addFieldToTab('Root.Main', TagField::create(
@@ -90,50 +67,6 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
             'Category',
             $this->getCategories()
         ));
-
-        $fields->removeByName('Markdown');
-        $fields->removeByName('EnhancedMarkdown');
-        $editor = MarkdownEditor::create('EnhancedMarkdown', 'Page Content (Markdown)')
-            ->setRows(20)                   // set number of rows in CMS
-            ->setWrap(false)                // disable word wrapping
-            ->setHighlightActiveLine(true)  // enable line highlighting
-            ->setDescription(
-                '<p>Markdown help: </p>'
-                . '<ul>'
-                    . '<li>'
-                        . '<a href="https://guides.github.com/features/mastering-markdown/" target="_blank">'
-                            . 'GitHub Markdown Guide'
-                        . '</a>'
-                    . '</li>'
-                    . '<li>'
-                        . 'Image Relations: <i>{{image:123}}</i><br>This assumes you have uploaded or imported images.<br>'
-                        . 'Scaling is possible by adding a width and height to the image tag, e.g. <i>{{image:123, width:200, height:300}}</i>'
-                    .'</li>'
-                . '</ul>'
-            )
-            ->addExtraClass('cms-description-toggle');
-
-
-        $fields->addFieldToTab('Root.Main', $editor);
-
-        $fields->removeByName('Images');
-        /** @var UploadField $imageField */
-        $imageField = UploadField::create('Images', 'Images');
-
-        $fields->addFieldToTab('Root.Images', $imageField);
-
-        $fields->addFieldToTab('Root.Main', $imagesGridField = GridField::create(
-            '',
-            'Image list',
-            $this->Images()
-        ));
-        $imagesConfig = $imagesGridField->getConfig();
-        $imagesColumns = $imagesConfig->getComponentByType(GridFieldDataColumns::class);
-        $imagesColumns->setDisplayFields([
-            'ID' => '#',
-            'Title' => 'Title',
-            'SmallIcon' => 'Thumbnail'
-        ]);
 
         return $fields;
     }
@@ -160,34 +93,11 @@ class Article extends \SilverStripe\ORM\DataObject implements CMSPreviewable
             $tag->write();
         }
 
-        // URLSegment
-        $articleHolder = ArticleHolder::get()->first();
-        $baseLink = $articleHolder ? $articleHolder->Link() : Director::absoluteBaseURL();
-        $defaultURLSegment = LinkUtility::generateURLSegment($this->Title, $this);
-        if ($this->URLSegment == '' || $this->URLSegment == $baseLink) {
-            $this->URLSegment = $defaultURLSegment;
-        } else {
-            $this->URLSegment = $defaultURLSegment;
-        }
-
-        // Markdown
-        try {
-            $this->Markdown = EnhancedMarkdownParser::parse($this->EnhancedMarkdown);
-        } catch (\Exception $e) {
-            Debug::message($e->getMessage());
-        }
-
         parent::onBeforeWrite();
     }
 
     public function PreviewLink($action = null)
     {
-        /*
-        $articleHolder = ArticleHolder::get()->first();
-        $baseLink = $articleHolder ? $articleHolder->Link() : Director::absoluteBaseURL();
-        return $baseLink . $this->URLSegment . '?stage=Stage';
-        */
-
         $admin = ArticleAdmin::singleton();
         return Controller::join_links(
             $admin->Link(str_replace('\\', '-', $this->ClassName)),

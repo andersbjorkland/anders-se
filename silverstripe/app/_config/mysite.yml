@@ -22,3 +22,13 @@ SilverStripe\Assets\Image:
 SilverStripe\AssetAdmin\Forms\ImageFormFactory:
   extensions:
     - App\Extension\ImageFormExtension
+
+App\Model\Article:
+  extensions:
+    - App\Extension\EnhancedMarkdownExtension
+    - App\Extension\URLSegmentExtension
+
+App\Model\Project:
+  extensions:
+    - App\Extension\EnhancedMarkdownExtension
+    - App\Extension\URLSegmentExtension

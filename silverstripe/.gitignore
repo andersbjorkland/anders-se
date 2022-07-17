@@ -3,8 +3,12 @@
 /.env
 /.env.local
 /vendor/
-/themes/simple/
+/themes/simple/**/*
 /_resources/
 /public/_resources/
 /.graphql-generated/
 /public/_graphql/
+
+!/themes/simple/templates/
+!/themes/simple/templates/App
+!/themes/simple/templates/App/**/*

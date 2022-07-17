@@ -15,6 +15,19 @@ class EnhancedMarkdownParser
         'height'
     ];
 
+    public static $HTML_DESCRIPTION = '<p>Markdown help: </p>'
+    . '<ul>'
+        . '<li>'
+            . '<a href="https://guides.github.com/features/mastering-markdown/" target="_blank">'
+                . 'GitHub Markdown Guide'
+            . '</a>'
+        . '</li>'
+        . '<li>'
+            . 'Image Relations: <i>{{image:123}}</i><br>This assumes you have uploaded or imported images.<br>'
+            . 'Scaling is possible by adding a width and height to the image tag, e.g. <i>{{image:123, width:200, height:300}}</i>'
+        .'</li>'
+    . '</ul>';
+
     public static function parse($markdown)
     {
         $markdown = self::replaceImageTags($markdown);
