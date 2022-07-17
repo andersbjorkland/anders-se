@@ -3,6 +3,7 @@
 namespace App\Task;
 
 use App\Model\Page\ArticleHolder;
+use App\Model\Page\ProjectHolder;
 use SilverStripe\Dev\Debug;
 use SilverStripe\GraphQL\Schema\Logger;
 use SilverStripe\Taxonomy\TaxonomyTerm;
@@ -31,6 +32,7 @@ class BuildBasicStructureTask extends \SilverStripe\Dev\BuildTask
             $this->createCategoryTaxonomies();
             $this->createTagTaxonomies();
             $this->createArticleHolder();
+            $this->createProjectHolder();
         } catch (\Exception $e) {
             Debug::message($e->getMessage());
         }
@@ -126,6 +128,16 @@ class BuildBasicStructureTask extends \SilverStripe\Dev\BuildTask
             $articleHolder->Title = 'Articles';
             $articleHolder->write();
             $this->logger->info('Created ArticleHolder');
+        }
+    }
+
+    protected function createProjectHolder()
+    {
+        if (ProjectHolder::get()->count() === 0) {
+            $projectHolder = ProjectHolder::create();
+            $projectHolder->Title = 'Projects';
+            $projectHolder->write();
+            $this->logger->info('Created ProjectHolder');
         }
     }
 }
